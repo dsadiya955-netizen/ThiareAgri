@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="THIARE-AGRI - Agriculture durable, produits bio frais cultivés avec respect de l'environnement. Achetez nos produits et payez par WhatsApp, Wave ou Orange Money.">
+    <meta name="keywords" content="agriculture durable, produits bio, légumes bio, fruits de saison, acheter en ligne, Wave, Orange Money, WhatsApp">
+    <title>THIARE-AGRI | Acheter & Commander - Paiement Mobile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        /* ============================================
+           STYLES EXCLUSIFS POUR LA PAGE ACHAT & COMMANDE
+           Ces styles s'ajoutent au CSS existant sans le modifier
+        ============================================ */
+        
+        /* Bannière de la page achat */
+        .shop-hero {
+            position: relative;
+            background: linear-gradient(135deg, #1a5f3a 0%, #2d8c4a 100%);
+            padding: 80px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            color: white;
+        }
+        
+        .shop-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .shop-hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        /* Panneau latéral du panier */
+        .cart-sidebar {
+            position: fixed;
+            right: -380px;
+            top: 0;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.15);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-header {
+            background: #2d6a4f;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cart-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .close-cart:hover {
+            transform: scale(1.1);
+        }
+        
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .cart-item-price {
+            font-size: 0.85rem;
+            color: #2d6a4f;
+            font-weight: 500;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cart-item-qty {
+            width: 45px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 4px;
+        }
+        
+        .remove-item {
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        
+        .remove-item:hover {
+            background: #c82333;
+        }
+        
+        .cart-total {
+            padding: 20px;
+            border-top: 2px solid #e9ecef;
+            background: #f8f9fa;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d6a4f;
+            margin-bottom: 15px;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .checkout-btn:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+        
+        /* Icône panier flottant */
+        .cart-icon-fixed {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2d6a4f;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.2s, background 0.2s;
+        }
+        
+        .cart-icon-fixed:hover {
+            transform: scale(1.08);
+            background: #1b4d36;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e63946;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Section produits améliorée pour l'achat */
+        .shop-products-section {
+            padding: 60px 20px;
+            background: #fef9e8;
+        }
+        
+        .shop-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        .section-title-shop {
+            text-align: center;
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .section-subtitle-shop {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .products-shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-shop-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-shop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-details {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a3c2c;
+            margin-bottom: 8px;
+        }
+        
+        .product-price {
+            font-size: 1.25rem;
+            color: #2d6a4f;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .product-price small {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #6c757d;
+        }
+        
+        .product-desc {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            background: #f4a261;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-to-cart:hover {
+            background: #e76f51;
+        }
+        
+        /* Modal de paiement */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-modal.open {
+            display: flex;
+        }
+        
+        .payment-modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 500px;
+            width: 90%;
+            padding: 30px 25px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .payment-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .payment-btn i {
+            font-size: 1.5rem;
+        }
+        
+        .payment-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+        
+        .payment-wave {
+            background: #1a2b4c;
+            color: white;
+        }
+        
+        .payment-orange {
+            background: #ff7900;
+            color: white;
+        }
+        
+        .payment-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(0.96);
+        }
+        
+        .close-modal {
+            background: #e9ecef;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .order-summary-modal {
+            background: #f1f3f5;
+            padding: 12px;
+            border-radius: 16px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Overlay pour panier */
+        .cart-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+        }
+        
+        .cart-overlay.active {
+            display: block;
+        }
+        
+        @media (max-width: 600px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            .shop-hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header existant (repris) -->
+    <header class="site-header" role="banner">
+        <nav class="navbar" role="navigation" aria-label="Navigation principale">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="#accueil" aria-label="Retour à l'accueil">
+                        THIARE-<span class="logo-highlight">AGRI</span>
+                    </a>
+                </div>
+                <button class="menu-toggle" aria-label="Menu mobile" aria-expanded="false" aria-controls="nav-menu">
+                    <span class="menu-bar"></span>
+                    <span class="menu-bar"></span>
+                    <span class="menu-bar"></span>
+                </button>
+                <ul class="nav-links" id="nav-menu" role="menubar">
+                    <li role="none"><a href="#accueil" role="menuitem" class="nav-link">Accueil</a></li>
+                    <li role="none"><a href="#produits" role="menuitem" class="nav-link">Produits</a></li>
+                    <li role="none"><a href="#a-propos" role="menuitem" class="nav-link">À Propos</a></li>
+                    <li role="none"><a href="#galerie" role="menuitem" class="nav-link">Galerie</a></li>
+                    <li role="none"><a href="javascript:void(0)" id="shopNavBtn" class="btn-contact" style="background:#2d6a4f; color:white;">Acheter</a></li>
+                    <li role="none"><a href="#contact" role="menuitem" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section Hero originale (on garde l'accueil intact mais on va ajouter l'ancre) -->
+        <section id="accueil" class="hero" aria-labelledby="hero-title">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 id="hero-title" class="hero-title">De la Terre à votre Table</h1>
+                <p class="hero-subtitle">Découvrez nos produits frais, cultivés avec passion et respect de l'environnement.</p>
+                <div class="hero-actions">
+                    <a href="#produits" class="cta-button">Nos Produits</a>
+                    <a href="#contact" class="cta-button secondary">Nous Contacter</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOUVEAU : PAGE ACHAT / COMMANDE intégrée (visible via ancre ou menu) -->
+        <section id="achat" class="shop-hero">
+            <h1><i class="fas fa-shopping-basket"></i> Achetez nos produits frais</h1>
+            <p>Commandez facilement et recevez vos légumes bio à domicile. Paiement sécurisé par Wave, Orange Money ou WhatsApp.</p>
+        </section>
+
+        <section class="shop-products-section">
+            <div class="shop-container">
+                <h2 class="section-title-shop">Nos produits du moment</h2>
+                <p class="section-subtitle-shop">Choisissez vos fruits et légumes, ajoutez au panier</p>
+                <div class="products-shop-grid" id="productsShopGrid">
+                    <!-- Les produits seront injectés via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Les sections originales (produits, a propos, galerie, contact) sont gardées -->
+        <section id="produits" class="services" aria-labelledby="produits-title">
+            <div class="section-header">
+                <h2 id="produits-title" class="section-title">Nos Spécialités</h2>
+                <p class="section-subtitle">Des produits frais cultivés selon les principes de l'agriculture durable</p>
+            </div>
+            <div class="products-container">
+                <!-- contenu original préservé -->
+                <div class="card" role="article"><div class="card-image-container"><img src="image/pmt.jpg" alt="Légumes biologiques" class="card-image" loading="lazy"><div class="card-badge">Bio</div></div><div class="card-content"><h3 class="card-title">Légumes Bio</h3><p class="card-description">Récoltés chaque matin pour une fraîcheur garantie, sans pesticides.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/raisin.jpg" alt="Raisins" class="card-image" loading="lazy"><div class="card-badge">Saison</div></div><div class="card-content"><h3 class="card-title">Fruits de Saison</h3><p class="card-description">Le vrai goût des fruits mûris naturellement au soleil.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/poivron.jpg" alt="Poivrons" class="card-image" loading="lazy"><div class="card-badge">Local</div></div><div class="card-content"><h3 class="card-title">Poivrons</h3><p class="card-description">Plante frileuse qui nécessite de la chaleur et du soleil.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/piment.jpg" alt="Piments" class="card-image" loading="lazy"><div class="card-badge">Épicé</div></div><div class="card-content"><h3 class="card-title">Piments</h3><p class="card-description">Plante de climat chaud, différents niveaux d'épice.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/mais.jpg" alt="Maïs" class="card-image" loading="lazy"><div class="card-badge">Traditionnel</div></div><div class="card-content"><h3 class="card-title">Maïs</h3><p class="card-description">Plante tropicale sensible au froid, sucré et juteux.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/melon.jpg" alt="Pastèque" class="card-image" loading="lazy"><div class="card-badge">Rafraîchissant</div></div><div class="card-content"><h3 class="card-title">Pastèque</h3><p class="card-description">Juteuse, sucrée et parfaite pour se rafraîchir.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/tomate.jpg" alt="Tomates" class="card-image" loading="lazy"><div class="card-badge">Polyvalent</div></div><div class="card-content"><h3 class="card-title">Tomates</h3><p class="card-description">Tomates fraîches, parfaites pour salades et cuissons.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/salade.jpg" alt="Salade" class="card-image" loading="lazy"><div class="card-badge">Santé</div></div><div class="card-content"><h3 class="card-title">Salade</h3><p class="card-description">Feuilles croquantes, récoltée le matin même.</p></div></div>
+                <div class="card" role="article"><div class="card-image-container"><img src="image/carotte.jpg" alt="Carottes" class="card-image" loading="lazy"><div class="card-badge">Santé</div></div><div class="card-content"><h3 class="card-title">Carottes</h3><p class="card-description">Racines juteuses et sucrées, récoltées le matin.</p></div></div>
+            </div>
+        </section>
+
+        <section id="a-propos" class="about-section"><div class="section-header"><h2 class="section-title">À Propos de Nous</h2><p class="section-subtitle">Notre engagement pour une agriculture durable et responsable</p></div><div class="about-content"><div class="about-text"><p>Depuis quelques mois, <strong>THIARE-AGRI</strong> cultive l'excellence et la durabilité...</p><div class="about-values"><div class="value-item"><i class="fas fa-leaf"></i><h4>Agriculture Biologique</h4><p>Pas de pesticides ni d'OGM</p></div><div class="value-item"><i class="fas fa-truck"></i><h4>Circuit Court</h4><p>De notre ferme à votre table</p></div><div class="value-item"><i class="fas fa-handshake"></i><h4>Équitable</h4><p>Conditions justes pour tous</p></div></div></div><div class="about-image"><div class="image-placeholder"><i class="fas fa-tractor"></i><p>Notre ferme durable</p></div></div></div></section>
+
+        <section id="galerie" class="gallery-section"><div class="section-header"><h2 class="section-title">La Vie à la Ferme</h2><p class="section-subtitle">Découvrez notre quotidien</p></div><div class="gallery-grid"><div class="gallery-item"><div class="gallery-overlay"><h3>Nos Champs</h3><p>Culture respectueuse</p></div></div><div class="gallery-item"><div class="gallery-overlay"><h3>Récolte Matinale</h3><p>Fraîcheur garantie</p>
+        </div></div><div class="gallery-item"><div class="gallery-overlay"><h3>Notre Équipe</h3><p>Passionnés</p></div></div><div class="gallery-item"><div class="gallery-overlay"><h3>Nos Produits</h3><p>Prêts à être dégustés</p></div></div></div></section>
+
+        <section id="contact" class="contact-section"><div class="contact-container"><div class="contact-info"><h2>Nous Contacter</h2><p>Vous avez des questions ? N'hésitez pas.</p><div class="contact-details"><div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h4>Notre Ferme</h4><p>Adresse MBOUR</p></div></div><div class="contact-item"><i class="fas fa-phone"></i><div><h4>Téléphone</h4><p>77 470 57 33</p></div></div><div class="contact-item"><i class="fas fa-envelope"></i><div><h4>Email</h4><p>contact@thiare-agri.com</p></div></div></div></div><div class="contact-form-container"><form id="contact-form"><div class="form-group"><input type="text" id="name" placeholder="Votre Nom" required></div><div class="form-group"><input type="email" id="email" placeholder="Votre Email" required></div><div class="form-group"><select id="subject" required><option value="" disabled selected>Sujet</option><option>visite</option><option>achat</option></select></div><div class="form-group"><textarea id="message" placeholder="Message..." rows="5"></textarea></div><button type="submit" class="cta-button full-width"><i class="fas fa-paper-plane"></i> Envoyer</button></form></div></div></section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-content"><div class="footer-section"><div class="logo footer-logo">THIARE-<span class="logo-highlight">AGRI</span></div><p class="footer-motto">De la Terre à votre Table</p><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-twitter"></i></a></div></div><div class="footer-section"><h4>Navigation</h4><ul class="footer-links"><li><a href="#accueil">Accueil</a></li><li><a href="#produits">Produits</a></li><li><a href="#achat">Acheter</a></li><li><a href="#contact">Contact</a></li></ul></div><div class="footer-section"><h4>Nos Engagements</h4><ul class="footer-links"><li>Agriculture Biologique</li><li>Circuit Court</li><li>Développement Durable</li></ul></div></div><div class="footer-bottom"><p>&copy; 2026 THIARE-AGRI - Tous droits réservés.</p></div></footer>
+
+    <!-- Éléments d'interface pour le panier / commande -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Mon panier</h3>
+            <button class="close-cart" id="closeCartBtn">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItemsList">
+            <p style="text-align:center; color:gray;">Votre panier est vide</p>
+        </div>
+        <div class="cart-total">
+            <div class="total-row">
+                <span>Total :</span>
+                <span id="cartTotalPrice">0 CFA</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn"><i class="fab fa-whatsapp"></i> Passer commande</button>
+        </div>
+    </div>
+
+    <div class="cart-icon-fixed" id="cartIconFixed">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cartCountBadge">0</span>
+    </div>
+
+    <!-- Modal paiement -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-modal-content">
+            <h3><i class="fas fa-credit-card"></i> Choisissez votre moyen de paiement</h3>
+            <div class="order-summary-modal" id="modalOrderSummary">Récapitulatif</div>
+            <div class="payment-options">
+                <button class="payment-btn payment-whatsapp" id="payWhatsAppBtn"><i class="fab fa-whatsapp"></i> Payer par WhatsApp</button>
+                <button class="payment-btn payment-wave" id="payWaveBtn"><i class="fas fa-bolt"></i> Payer par Wave</button>
+                <button class="payment-btn payment-orange" id="payOrangeBtn"><i class="fas fa-mobile-alt"></i> Payer par Orange Money</button>
+            </div>
+            <button class="close-modal" id="closeModalBtn">Annuler</button>
+        </div>
+    </div>
+
+    <script>
+        // ---------- CATALOGUE PRODUITS (pour la boutique) ----------
+        const productCatalog = [
+            { id: 1, name: "Légumes Bio (lot)", price: 2500, desc: "Assortiment de légumes frais bio", img: "image/pmt.jpg" },
+            { id: 2, name: "Raisin sucré", price: 1800, desc: "Grappes juteuses", img: "image/raisin.jpg" },
+            { id: 3, name: "Poivrons colorés", price: 1200, desc: "Mélange de poivrons", img: "image/poivron.jpg" },
+            { id: 4, name: "Piments forts", price: 900, desc: "Piments frais", img: "image/piment.jpg" },
+            { id: 5, name: "Maïs doux (2pcs)", price: 1000, desc: "Épis frais", img: "image/mais.jpg" },
+            { id: 6, name: "Pastèque juteuse", price: 2000, desc: "Fruit rafraîchissant", img: "image/melon.jpg" },
+            { id: 7, name: "Tomates grappes", price: 1100, desc: "Tomates bien mûres", img: "image/tomate.jpg" },
+            { id: 8, name: "Salade verte", price: 700, desc: "Laitue croquante", img: "image/salade.jpg" },
+            { id: 9, name: "Carottes botte", price: 800, desc: "Carottes sucrées", img: "image/carotte.jpg" }
+        ];
+
+        let cart = [];
+
+        function saveCart() { localStorage.setItem("thiareCart", JSON.stringify(cart)); updateCartUI(); }
+        function loadCart() { const saved = localStorage.getItem("thiareCart"); if(saved) cart = JSON.parse(saved); updateCartUI(); }
+
+        function updateCartUI() {
+            const container = document.getElementById("cartItemsList");
+            const totalSpan = document.getElementById("cartTotalPrice");
+            const badge = document.getElementById("cartCountBadge");
+            let total = 0;
+            let itemCount = 0;
+            if(!container) return;
+            if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:gray;">Votre panier est vide</p>'; totalSpan.innerText = "0 CFA"; badge.innerText = "0"; return; }
+            container.innerHTML = "";
+            cart.forEach((item, idx) => {
+                total += item.price * item.qty;
+                itemCount += item.qty;
+                const div = document.createElement("div"); div.className = "cart-item";
+                div.innerHTML = `<div class="cart-item-info"><div class="cart-item-name">${item.name}</div><div class="cart-item-price">${item.price} CFA / unité</div></div>
+                <div class="cart-item-actions"><input type="number" class="cart-item-qty" data-id="${item.id}" value="${item.qty}" min="1" style="width:55px;"><button class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button></div>`;
+                container.appendChild(div);
+            });
+            totalSpan.innerText = total + " CFA";
+            badge.innerText = itemCount;
+            document.querySelectorAll(".remove-item").forEach(btn => { btn.addEventListener("click", (e) => { const id = parseInt(btn.dataset.id); cart = cart.filter(i => i.id !== id); saveCart(); }); });
+            document.querySelectorAll(".cart-item-qty").forEach(inp => { inp.addEventListener("change", (e) => { const id = parseInt(inp.dataset.id); const newQty = parseInt(inp.value); if(newQty>0){ const prod = cart.find(i=>i.id===id); if(prod) prod.qty = newQty; saveCart(); } }); });
+        }
+
+        function addToCart(product) {
+            const existing = cart.find(i => i.id === product.id);
+            if(existing) existing.qty += 1;
+            else cart.push({ ...product, qty: 1 });
+            saveCart();
+            document.getElementById("cartSidebar").classList.add("open");
+            document.getElementById("cartOverlay").classList.add("active");
+        }
+
+        function renderShop() {
+            const grid = document.getElementById("productsShopGrid");
+            if(!grid) return;
+            grid.innerHTML = "";
+            productCatalog.forEach(p => {
+                const card = document.createElement("div"); card.className = "product-shop-card";
+                card.innerHTML = `<img src="${p.img}" alt="${p.name}" class="product-img" onerror="this.src='https://placehold.co/400x300?text=Image+ferme'">
+                <div class="product-details"><h3 class="product-title">${p.name}</h3><div class="product-price">${p.price} CFA <small>/ kg ou lot</small></div><p class="product-desc">${p.desc}</p>
+                <button class="add-to-cart" data-id="${p.id}"><i class="fas fa-cart-plus"></i> Ajouter au panier</button></div>`;
+                grid.appendChild(card);
+            });
+            document.querySelectorAll(".add-to-cart").forEach(btn => {
+                btn.addEventListener("click", (e) => { const id = parseInt(btn.dataset.id); const prod = productCatalog.find(p=>p.id===id); if(prod) addToCart(prod); });
+            });
+        }
+
+        // Interface panier + modal paiement
+        let currentPendingOrder = null;
+        function getCartSummary() {
+            if(cart.length===0) return null;
+            let total = 0, details = [];
+            cart.forEach(item => { total += item.price * item.qty; details.push(`${item.name} x${item.qty} = ${item.price*item.qty} CFA`); });
+            return { total, details: details.join(", "), fullText: details.join("\n") };
+        }
+
+        document.getElementById("checkoutBtn")?.addEventListener("click", () => {
+            const summary = getCartSummary();
+            if(!summary) { alert("Votre panier est vide"); return; }
+            currentPendingOrder = summary;
+            document.getElementById("modalOrderSummary").innerHTML = `<strong>Total : ${summary.total} CFA</strong><br>${summary.details}`;
+            document.getElementById("paymentModal").classList.add("open");
+        });
+
+        function sendOrderViaWhatsApp(phoneNumber, orderText) {
+            const encoded = encodeURIComponent(`Bonjour THIARE-AGRI, je souhaite commander :\n${orderText}\nMerci de confirmer ma commande.`);
+            window.open(`https://wa.me/$221774705733?text=${encoded}`, '_blank');
+        }
+
+        document.getElementById("payWhatsAppBtn")?.addEventListener("click", () => {
+            if(!currentPendingOrder) return;
+            const msg = `*NOUVELLE COMMANDE*\n${currentPendingOrder.fullText}\nTotal : ${currentPendingOrder.total} CFA\nPaiement via WhatsApp. Livraison à confirmer.`;
+            sendOrderViaWhatsApp("221774705733", msg);
+            document.getElementById("paymentModal").classList.remove("open");
+            cart = []; saveCart();
+            alert("Demande envoyée sur WhatsApp. Notre équipe vous contactera.");
+        });
+
+        function mobilePaymentHandler(method) {
+            if(!currentPendingOrder) return;
+            const totalAmount = currentPendingOrder.total;
+            const orderRef = "THIARE" + Date.now();
+            const message = `Commande #${orderRef}\n${currentPendingOrder.fullText}\nTotal: ${totalAmount} CFA\nMode: ${method}\nNuméro à débiter (Wave/Orange) : veuillez fournir votre numéro via WhatsApp.`;
+            sendOrderViaWhatsApp("221774705733", message + `\n\nMerci de nous envoyer votre numéro ${method} pour finaliser le paiement.`);
+            document.getElementById("paymentModal").classList.remove("open");
+            cart = []; saveCart();
+            alert(`Demande de paiement par ${method} envoyée. Vous recevrez un message pour finaliser.`);
+        }
+        document.getElementById("payWaveBtn")?.addEventListener("click", () => mobilePaymentHandler("Wave"));
+        document.getElementById("payOrangeBtn")?.addEventListener("click", () => mobilePaymentHandler("Orange Money"));
+
+        document.getElementById("closeModalBtn")?.addEventListener("click", () => { document.getElementById("paymentModal").classList.remove("open"); });
+        document.getElementById("cartIconFixed")?.addEventListener("click", () => { document.getElementById("cartSidebar").classList.add("open"); document.getElementById("cartOverlay").classList.add("active"); });
+        document.getElementById("closeCartBtn")?.addEventListener("click", () => { document.getElementById("cartSidebar").classList.remove("open"); document.getElementById("cartOverlay").classList.remove("active"); });
+        document.getElementById("cartOverlay")?.addEventListener("click", () => { document.getElementById("cartSidebar").classList.remove("open"); document.getElementById("cartOverlay").classList.remove("active"); });
+
+        // Navigation vers achat
+        document.getElementById("shopNavBtn")?.addEventListener("click", (e) => { e.preventDefault(); document.getElementById("achat").scrollIntoView({ behavior: "smooth" }); });
+        // Initialisation
+        loadCart();
+        renderShop();
+        document.getElementById("current-year") && (document.getElementById("current-year").innerText = new Date().getFullYear());
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
